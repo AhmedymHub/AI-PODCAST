@@ -30,6 +30,11 @@ import GeneratePodcast from "@/components/GeneratePodcast"
 import GenerateThumbnail from "@/components/GenerateThumbnail"
 import { Loader } from "lucide-react"
 import { Id } from "@/convex/_generated/dataModel"
+import { useToast } from "@/hooks/use-toast"
+import { useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 const voiceCategories = ['alloy', 'shimmer', 'nova', 'echo', 'fable', 'onyx'];
 
@@ -40,7 +45,8 @@ const formSchema = z.object({
 })
 
 const CreatPodcast = () => {
-  
+  const router = useRouter();
+
   const [imagePrompt, setImagePrompt] = useState('');
   const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(null)
   const [imageUrl, setImageUrl] = useState('');
@@ -54,6 +60,10 @@ const CreatPodcast = () => {
   
   const [isSubmitting , setIsSubmitting] = useState(false);
 
+  const createPodcast = useMutation(api.podcast.createPodcast);
+
+  const { toast } = useToast();
+
 
  // 1. Define your form.
  const form = useForm<z.infer<typeof formSchema>>({
@@ -64,16 +74,52 @@ const CreatPodcast = () => {
   },
 })
 
-// 2. Define a submit handler.
-function onSubmit(values: z.infer<typeof formSchema>) {
-  // Do something with the form values.
-  // ✅ This will be type-safe and validated.
-  console.log(values)
+
+async function onSubmit(data: z.infer<typeof formSchema>) {
+  try {
+    setIsSubmitting(true);
+    if(!audioUrl || !imageUrl || !voiceType){
+      toast({
+        title: 'Please generate audio and image',
+      })
+      setIsSubmitting(false);
+      throw new Error('Please generate audio and image')
+    }
+
+   const podcast =  await createPodcast({
+      podcastTitle: data.podcastTitle,
+      podcastDescription: data.podcastDescription,
+      audioUrl,
+      imageUrl,
+      voiceType,
+      imagePrompt,
+      voicePrompt,
+      views: 0,
+      audioDuration,
+      audioStorageId: audioStorageId!,
+      imageStorageId: imageStorageId!,
+    })
+    toast({
+      title: 'Podcast created successfully'})
+      setIsSubmitting(false);
+      router.push('/')
+    
+  } catch (error) {
+    console.error(error);
+    toast({
+      title: 'Error',
+      variant: 'destructive',
+    })
+    setIsSubmitting(false);
+    
+  }
+ 
 }
 
   
   return (
     <section className="mt-10 flex flex-col">
+      <Image src="/icons/logo.svg" alt="logo" width={23} height={27} />
     <h1 className='text-20 font-bold
     text-white-1'>Create Podcast</h1>
 
@@ -87,7 +133,7 @@ function onSubmit(values: z.infer<typeof formSchema>) {
             <FormItem className="flex flex-col gap-2.5">
               <FormLabel className="text-16 font-bold text-white-1">Title</FormLabel>
               <FormControl>
-                <Input className="input-class focus-visible:ring-orange-1" placeholder="AIpod Pro Podcast" {...field} />
+                <Input className="input-class focus-visible:ring-lime-500" placeholder="AIpod Pro Podcast" {...field} />
               </FormControl>
               <FormMessage  className="text-white-1"/>
             </FormItem>
@@ -100,12 +146,12 @@ function onSubmit(values: z.infer<typeof formSchema>) {
             </Label>
 
             <Select onValueChange={(value) => setVoiceType(value)}>
-              <SelectTrigger className={cn('text-16 w-full border-none bg-black-1 text-gray-1  focus-visible:ring-offset-orange-1')}>
+              <SelectTrigger className={cn('text-16 w-full border-none bg-black-1 text-gray-1  focus-visible:ring-offset-lime-500')}>
                 <SelectValue placeholder="Select AI Voice"  className="placeholder:text-gray-1"/>
               </SelectTrigger>
-              <SelectContent  className="text-16 border-none bg-black-1 font-bold text-white-1 focus-visible:ring-offset-orange-1">
+              <SelectContent  className="text-16 border-none bg-black-1 font-bold text-white-1 focus-visible:ring-offset-lime-500">
                 {voiceCategories.map((category) => (
-                  <SelectItem key={category} value={category} className="capitalize  focus-visible:ring-offset-orange-1">
+                  <SelectItem key={category} value={category} className="capitalize  focus-visible:ring-offset-lime-500">
                     {category}
                   </SelectItem>
                 ))}
@@ -127,7 +173,7 @@ function onSubmit(values: z.infer<typeof formSchema>) {
             <FormItem className="flex flex-col gap-2.5">
               <FormLabel className="text-16 font-bold text-white-1">Description</FormLabel>
               <FormControl>
-                <Textarea className="input-class  focus-visible:ring-offset-orange-1" placeholder="Write a short podcast description" {...field} />
+                <Textarea className="input-class  focus-visible:ring-offset-lime-500" placeholder="Write a short podcast description" {...field} />
               </FormControl>
               <FormMessage  className="text-white-1"/>
             </FormItem>
@@ -146,9 +192,15 @@ function onSubmit(values: z.infer<typeof formSchema>) {
                 setAudioDuration={setAudioDuration}
                />
 
-              <GenerateThumbnail/>
+              <GenerateThumbnail
+              setImage={setImageUrl}
+              setImageStorageId={setImageStorageId}
+              image={imageUrl}
+              imagePrompt={imagePrompt}
+              setImagePrompt={setImagePrompt}
+              />
               <div>
-                <Button type="submit" className="text-16 w-full bg-orange-1 py-4 font-extrabold text-white-1 transition-all duration-500 hover:bg-black-1">
+                <Button type="submit" className="text-16 w-full bg-lime-500 py-4 font-extrabold text-white-1 transition-all duration-500 hover:bg-black-1">
                   {isSubmitting ? (
                     <>
                     Submitting

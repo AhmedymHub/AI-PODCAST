@@ -13,12 +13,20 @@ const nextConfig = {
         },
         {
           protocol: 'https',
-          hostname:'tapesearch.com' 
-          },
-          {
-            protocol: 'https',
-            hostname:'is1-ssl.mzstatic.com' 
-            },
+          hostname: "limitless-eel-478.convex.cloud"
+        },
+        {
+          protocol: 'https',
+          hostname: "img.clerk.com"
+        },
+        // {
+        //   protocol: 'https',
+        //   hostname:'tapesearch.com' 
+        //   },
+        //   {
+        //     protocol: 'https',
+        //     hostname:'is1-ssl.mzstatic.com' 
+        //     },
       ]
     }
   };

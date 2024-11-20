@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
-import ConvexClerkProvider  from "./providers/ConvexClerkProvider";
+import ConvexClerkProvider  from "../providers/ConvexClerkProvider";
+import AudioProvider from "@/providers/AudioProvider";
 
 // Call the font loader and assign it to a constant at the module scope
-const inter = Inter({ subsets: ["latin"] }); // Change this to 'inter' instead of 'manrope'
+const manrope = Manrope({ subsets: ["latin"] }); // Change this to 'inter' instead of 'manrope'
 
 export const metadata: Metadata = {
   title: "AIPod",
@@ -20,12 +21,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ConvexClerkProvider>
       <html lang="en">
-          <body className={inter.className}>
-            <ConvexClerkProvider>
+        <AudioProvider>
+          <body className={manrope.className}>
              {children}
-            </ConvexClerkProvider>
-            </body>
+          </body>
+        </AudioProvider>
       </html>
+      </ConvexClerkProvider>
   );
 }

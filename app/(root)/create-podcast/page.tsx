@@ -36,7 +36,7 @@ import { api } from "@/convex/_generated/api"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 
-const voiceCategories = ['alloy', 'shimmer', 'nova', 'echo', 'fable', 'onyx'];
+const voiceCategories = ['alloy', 'shimmer', 'nova', 'echo', 'fable', 'onyx', 'ahmed'];
 
 
 const formSchema = z.object({

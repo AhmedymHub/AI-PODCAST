@@ -41,6 +41,10 @@ export const voiceDetails = [
     id: 6,
     name: "shimmer",
   },
+  {
+    id: 7,
+    name: "ahmed",
+  },
 ];
 
 export const podcastData = [

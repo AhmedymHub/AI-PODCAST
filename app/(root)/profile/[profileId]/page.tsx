@@ -30,27 +30,25 @@ const ProfilePage = ({
         Podcaster Profile
       </h1>
       <div className="mt-6 flex flex-col gap-6 max-md:items-center md:flex-row">
-      <ProfileCard
-          podcastData={podcastsData!}
-          imageUrl={user?.imageUrl!}
-          userFirstName={user?.name!}
+        <ProfileCard
+          podcastData={podcastsData}
+          imageUrl={user.imageUrl || "/default-profile.png"} // Handle fallback
+          userFirstName={user.name || "Unknown"} // Handle fallback
         />
       </div>
       <section className="mt-9 flex flex-col gap-5">
         <h1 className="text-20 font-bold text-white-1">All Podcasts</h1>
-        {podcastsData && podcastsData.podcasts.length > 0 ? (
+        {podcastsData.podcasts && podcastsData.podcasts.length > 0 ? (
           <div className="podcast_grid">
-            {podcastsData?.podcasts
-              ?.slice(0, 4)
-              .map((podcast) => (
-                <PodcastCard
-                  key={podcast._id}
-                  imgUrl={podcast.imageUrl!}
-                  title={podcast.podcastTitle!}
-                  description={podcast.podcastDescription}
-                  podcastId={podcast._id}
-                />
-              ))}
+            {podcastsData.podcasts.slice(0, 4).map((podcast) => (
+              <PodcastCard
+                key={podcast._id}
+                imgUrl={podcast.imageUrl || "/default-podcast-image.png"} // Handle fallback
+                title={podcast.podcastTitle || "Untitled Podcast"} // Handle fallback
+                description={podcast.podcastDescription || "No description available"} // Handle fallback
+                podcastId={podcast._id}
+              />
+            ))}
           </div>
         ) : (
           <EmptyState
@@ -65,3 +63,4 @@ const ProfilePage = ({
 };
 
 export default ProfilePage;
+

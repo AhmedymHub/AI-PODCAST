@@ -1,7 +1,6 @@
 "use client";
 
 import PodcastCard from '@/components/PodcastCard'
-import { Button } from '@/components/ui/button'
 import React from 'react'
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";

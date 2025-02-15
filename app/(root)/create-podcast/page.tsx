@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -86,7 +85,7 @@ async function onSubmit(data: z.infer<typeof formSchema>) {
       throw new Error('Please generate audio and image')
     }
 
-   const podcast =  await createPodcast({
+        await createPodcast({
       podcastTitle: data.podcastTitle,
       podcastDescription: data.podcastDescription,
       audioUrl,

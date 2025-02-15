@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { EmblaOptionsType, EmblaCarouselType } from 'embla-carousel'
+import { EmblaCarouselType } from 'embla-carousel'
 import { DotButton, useDotButton } from './EmblaCarouselDotButton'
 import Autoplay from 'embla-carousel-autoplay'
 import useEmblaCarousel from 'embla-carousel-react'
@@ -31,7 +31,7 @@ const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
     onNavButtonClick
   )
 
-  const slides = fansLikeDetail && fansLikeDetail?.filter((items: any) => items.totalPodcasts > 0)
+  const slides = fansLikeDetail?.filter((items) => items.totalPodcasts > 0);
 
   if(!slides) return <LoaderSpinner />
 

@@ -8,6 +8,7 @@ import { useAction, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { v4 as uuidv4 } from 'uuid'
 import { useToast } from "@/hooks/use-toast"
+import { Id } from '@/convex/_generated/dataModel';
 
 // import { generateUploadUrl } from '@/convex/files';
 
@@ -50,7 +51,8 @@ const useGeneratePodcast = ({
           const file = new File([blob], fileName, { type: 'audio/mpeg' });
 
           const uploaded = await startUpload([file]);
-          const storageId = (uploaded[0].response as any).storageId;
+          
+          const storageId = (uploaded[0].response as { storageId: string }).storageId as Id<"_storage">;
 
           setAudioStorageId(storageId);
 

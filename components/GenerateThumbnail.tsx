@@ -12,6 +12,7 @@ import { useAction, useMutation } from 'convex/react';
 import { useUploadFiles } from '@xixixao/uploadstuff/react';
 import { api } from '@/convex/_generated/api';
 import { v4 as uuidv4 } from 'uuid'
+import { Id } from '@/convex/_generated/dataModel';
 
 const GenerateThumbnail = ({setImage, setImageStorageId, image, imagePrompt, setImagePrompt}:GenerateThumbnailProps) => {
   const [isAiThumbnail, setIsAiThumbnail] = useState(false);
@@ -33,7 +34,7 @@ const GenerateThumbnail = ({setImage, setImageStorageId, image, imagePrompt, set
       const file = new File([blob], fileName, { type: 'image/png' });
 
       const uploaded = await startUpload([file]);
-      const storageId = (uploaded[0].response as any).storageId;
+      const storageId = (uploaded[0].response as { storageId: string }).storageId as Id<"_storage">;
 
       setImageStorageId(storageId);
 
